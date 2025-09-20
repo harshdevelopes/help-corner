@@ -141,9 +141,9 @@ export default async function Home() {
               </p>
               <p className="about-modern-desc">
                 Our mission is to make your life simpler by bringing quality
-                services to your doorstep. Whether you're a busy homeowner or a
-                growing business, Help Cornner is here to help you save time and
-                enjoy peace of mind.
+                services to your doorstep. Whether you&apos;re a busy homeowner
+                or a growing business, Help Cornner is here to help you save
+                time and enjoy peace of mind.
               </p>
               <div className="about-modern-features">
                 <div className="about-modern-feature">

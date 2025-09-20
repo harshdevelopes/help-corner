@@ -1,4 +1,3 @@
-import { supabase } from "@/utils/supabase";
 import { redirect } from "next/navigation";
 import createSupabaseServerClient from "@/utils/supabase-server";
 
