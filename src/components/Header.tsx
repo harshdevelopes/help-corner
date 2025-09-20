@@ -4,7 +4,7 @@ import Image from "next/image";
 import AuthButton from "./AuthButton";
 
 export default async function Header() {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
