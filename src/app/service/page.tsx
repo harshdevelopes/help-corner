@@ -1,7 +1,6 @@
 import { supabase } from "@/utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Image from "next/image";
 import ServiceCardContent from "@/components/ServiceCardContent";
 
 interface Service {

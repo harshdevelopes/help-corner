@@ -1,4 +1,3 @@
-import { supabase } from "@/utils/supabase";
 import { redirect } from "next/navigation";
 import createSupabaseServerClient from "@/utils/supabase-server";
 
@@ -11,7 +10,7 @@ export default function Login() {
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
 
     const {
       data: { user },
