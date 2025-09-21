@@ -8,7 +8,7 @@
 }
 
 .dashboard-container {
-  display: block;
+  display: flex;
   font-family: poppins_light, sans-serif;
 }
 
@@ -23,6 +23,7 @@
   left: 0;
   height: 100vh;
   z-index: 1000;
+  transition: width 0.3s; /* Added for smooth transition */
 }
 
 .sidebar-header {
@@ -74,6 +75,22 @@
   padding: 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #343a40;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #343a40;
 }
 
 .logout-btn {
@@ -94,6 +111,7 @@
 .stats-section {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap; /* Added for better wrapping */
 }
 
 .stat-card {
@@ -103,6 +121,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-grow: 1;
   text-align: center;
+  color: #343a40;
+  min-width: 200px; /* Added for better wrapping */
 }
 
 .section-title {
@@ -256,4 +276,86 @@
   margin-top: 15px;
   border: 1px solid transparent;
   border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+  }
+
+  .sidebar-header h2,
+  .sidebar-nav .nav-link span {
+    display: none;
+  }
+
+  .sidebar-nav .nav-link {
+    justify-content: center;
+  }
+
+  .main-content {
+    margin-left: 70px;
+  }
+
+  .stats-section {
+    flex-direction: column;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-right {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-around;
+    z-index: 1;
+  }
+
+  .sidebar-header {
+    display: none;
+  }
+
+  .sidebar-nav ul {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+  }
+
+  .sidebar-nav .nav-link {
+    padding: 15px 10px;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .dashboard-header {
+    padding: 15px;
+  }
+
+  .header-right {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logout-btn {
+    margin-top: 10px;
+  }
 }
