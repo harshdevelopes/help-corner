@@ -28,11 +28,7 @@ export default async function ServicePage() {
     <>
       <Header />
       <main>
-        <section
-          id="home"
-          className="hero-section"
-          style={{ minHeight: "50vh" }}
-        >
+        <section id="home" className="hero-section">
           <div className="hero-content">
             <div className="hero-text">
               <h1 className="hero-title">Book Our Service</h1>
