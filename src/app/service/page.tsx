@@ -2,6 +2,7 @@ import { supabase } from "@/utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ServiceCardContent from "@/components/ServiceCardContent";
+import Image from "next/image";
 
 interface Service {
   id: number;
@@ -27,35 +28,36 @@ export default async function ServicePage() {
     <>
       <Header />
       <main>
-        <section
-          id="services"
-          className="services-section"
-          style={{ paddingTop: "120px" }}
-        >
-          <h2 className="section-title">All Our Services</h2>
+        <section id="home" className="hero-section">
+          <div className="hero-content">
+            <div className="hero-text">
+              <h1 className="hero-title">Book Our Service</h1>
+            </div>
+            <div className="hero-logo">
+              <Image
+                src="/images/logo.png"
+                alt="Help Cornner Logo"
+                width={400}
+                height={400}
+                className="hero-logo-img"
+              />
+            </div>
+          </div>
+        </section>
+        <section id="services" className="services-section">
           <div className="container">
-            <div
-              className="services-grid"
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "40px",
-                justifyContent: "center",
-              }}
-            >
-              {services.length > 0 ? (
-                services.map((service) => (
-                  <div
-                    className="service-card"
-                    key={service.id}
-                    style={{ flex: "1 1 300px", maxWidth: "320px" }}
-                  >
-                    <ServiceCardContent service={service} />
-                  </div>
-                ))
-              ) : (
-                <p>No services found.</p>
-              )}
+            <div className="services-grid">
+              <div className="services-row">
+                {services.length > 0 ? (
+                  services.map((service) => (
+                    <div className="service-card" key={service.id}>
+                      <ServiceCardContent service={service} />
+                    </div>
+                  ))
+                ) : (
+                  <p>No services found.</p>
+                )}
+              </div>
             </div>
           </div>
         </section>

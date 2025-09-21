@@ -2,13 +2,11 @@ import React from "react";
 
 interface DashboardStatsProps {
   userCount: number;
-  adminCount: number;
   serviceCount: number;
 }
 
 const DashboardStats: React.FC<DashboardStatsProps> = ({
   userCount,
-  adminCount,
   serviceCount,
 }) => {
   return (
@@ -18,10 +16,6 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
         <div className="stat-card">
           <h3>Total Users</h3>
           <p>{userCount}</p>
-        </div>
-        <div className="stat-card">
-          <h3>Total Admins</h3>
-          <p>{adminCount}</p>
         </div>
         <div className="stat-card">
           <h3>Total Services</h3>

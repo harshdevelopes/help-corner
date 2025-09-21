@@ -7,12 +7,14 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import DashboardStats from "./components/DashboardStats";
 import ServicesView from "./components/ServicesView";
+import UsersView from "./components/UsersView";
 
 interface Profile {
   id: string;
   user_name: string;
   user_email: string;
   user_number: string;
+  user_role: string;
 }
 
 interface Service {
@@ -26,16 +28,14 @@ interface Service {
 interface DashboardViewProps {
   user: User;
   initialUsers: Profile[];
-  initialAdmins: Profile[];
   initialServices: Service[];
 }
 
-type Tab = "dashboard" | "users" | "admins" | "services";
+type Tab = "dashboard" | "users" | "services";
 
 export default function DashboardView({
   user,
   initialUsers,
-  initialAdmins,
   initialServices,
 }: DashboardViewProps) {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
@@ -49,15 +49,13 @@ export default function DashboardView({
           {activeTab === "dashboard" && (
             <DashboardStats
               userCount={initialUsers.length}
-              adminCount={initialAdmins.length}
               serviceCount={initialServices.length}
             />
           )}
           {activeTab === "services" && (
             <ServicesView initialServices={initialServices} />
           )}
-          {activeTab === "users" && <div>Users Table Here</div>}
-          {activeTab === "admins" && <div>Admins Table Here</div>}
+          {activeTab === "users" && <UsersView users={initialUsers} />}
         </main>
       </div>
     </div>

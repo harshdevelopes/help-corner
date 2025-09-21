@@ -13,33 +13,28 @@ async function getDashboardData() {
 
   const { data: users, error: usersError } = await supabase
     .from("profiles")
-    .select("*")
-    .eq("user_role", "user");
-  const { data: admins, error: adminsError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_role", "admin");
+    .select("*");
+
   const { data: services, error: servicesError } = await supabase
     .from("hc_services")
     .select("*");
 
-  if (usersError || adminsError || servicesError) {
+  if (usersError || servicesError) {
     console.error(
       "Error fetching dashboard data:",
-      usersError || adminsError || servicesError
+      usersError || servicesError
     );
   }
 
   return {
     user,
     users: users || [],
-    admins: admins || [],
     services: services || [],
   };
 }
 
 export default async function DashboardPage() {
-  const { user, users, admins, services } = await getDashboardData();
+  const { user, users, services } = await getDashboardData();
 
   if (!user) {
     return (
@@ -53,7 +48,6 @@ export default async function DashboardPage() {
     <DashboardView
       user={user}
       initialUsers={users}
-      initialAdmins={admins}
       initialServices={services}
     />
   );
