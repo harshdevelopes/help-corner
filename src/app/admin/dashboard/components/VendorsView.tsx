@@ -4,9 +4,74 @@ import React, { useState } from "react";
 import { supabase } from "@/utils/supabase";
 import Image from "next/image";
 
-// Helper component for images with error handling
-const VendorImage = ({ src, alt, width = 50, height = 50 }: { src: string; alt: string; width?: number; height?: number }) => {
+// Image Modal Component
+const ImageModal = ({ src, alt, isOpen, onClose }: { src: string; alt: string; isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.9)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 10000,
+        cursor: "pointer",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          position: "relative",
+          maxWidth: "90%",
+          maxHeight: "90%",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "-40px",
+            right: "0",
+            background: "#fff",
+            border: "none",
+            borderRadius: "50%",
+            width: "30px",
+            height: "30px",
+            cursor: "pointer",
+            fontSize: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#333",
+          }}
+        >
+          ×
+        </button>
+        <img
+          src={src}
+          alt={alt}
+          style={{
+            maxWidth: "100%",
+            maxHeight: "90vh",
+            objectFit: "contain",
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Helper component for images with view button
+const VendorImageWithView = ({ src, alt, width = 50, height = 50 }: { src: string; alt: string; width?: number; height?: number }) => {
   const [imgError, setImgError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   if (imgError || !src) {
     return <span style={{ color: "#999" }}>No photo</span>;
@@ -16,15 +81,35 @@ const VendorImage = ({ src, alt, width = 50, height = 50 }: { src: string; alt: 
   const isExternalUrl = src.startsWith("http://") || src.startsWith("https://");
 
   return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      style={{ objectFit: "cover", borderRadius: "4px" }}
-      unoptimized={isExternalUrl}
-      onError={() => setImgError(true)}
-    />
+    <>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          style={{ objectFit: "cover", borderRadius: "4px", cursor: "pointer" }}
+          unoptimized={isExternalUrl}
+          onError={() => setImgError(true)}
+          onClick={() => setShowModal(true)}
+        />
+        <button
+          onClick={() => setShowModal(true)}
+          style={{
+            padding: "4px 8px",
+            fontSize: "12px",
+            background: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          View
+        </button>
+      </div>
+      <ImageModal src={src} alt={alt} isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
   );
 };
 
@@ -366,14 +451,14 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                   <tr key={vendor.id}>
                     <td>
                       {vendor.photo ? (
-                        <VendorImage src={vendor.photo} alt={vendor.name} />
+                        <VendorImageWithView src={vendor.photo} alt={vendor.name} />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
                     </td>
                     <td>
                       {vendor.aadhar_card_photo ? (
-                        <VendorImage src={vendor.aadhar_card_photo} alt="Aadhar Card" />
+                        <VendorImageWithView src={vendor.aadhar_card_photo} alt="Aadhar Card" />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
@@ -386,21 +471,14 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                     </td>
                     <td>
                       {vendor.bank_details_photo ? (
-                        <VendorImage src={vendor.bank_details_photo} alt="Bank Details" />
+                        <VendorImageWithView src={vendor.bank_details_photo} alt="Bank Details" />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
                     </td>
                     <td>
                       {vendor.police_verification ? (
-                        <a
-                          href={vendor.police_verification}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ color: "#007bff" }}
-                        >
-                          View
-                        </a>
+                        <VendorImageWithView src={vendor.police_verification} alt="Police Verification" />
                       ) : (
                         <span style={{ color: "#999" }}>Not provided</span>
                       )}
@@ -409,7 +487,7 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                     <td>{vendor.availability || "-"}</td>
                     <td>
                       {vendor.physical_form_photo ? (
-                        <VendorImage src={vendor.physical_form_photo} alt="Physical Form" />
+                        <VendorImageWithView src={vendor.physical_form_photo} alt="Physical Form" />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
