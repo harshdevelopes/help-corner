@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import DashboardStats from "./components/DashboardStats";
 import ServicesView from "./components/ServicesView";
 import UsersView from "./components/UsersView";
+import VendorsView from "./components/VendorsView";
 
 interface Profile {
   id: string;
@@ -25,18 +26,35 @@ interface Service {
   link: string;
 }
 
+interface Vendor {
+  id: number;
+  name: string;
+  photo?: string;
+  aadhar_card_photo?: string;
+  address?: string;
+  bank_details_photo?: string;
+  phone_number?: string;
+  police_verification?: string;
+  expertise_category?: string;
+  nick_name?: string;
+  availability?: string;
+  physical_form_photo?: string;
+}
+
 interface DashboardViewProps {
   user: User;
   initialUsers: Profile[];
   initialServices: Service[];
+  initialVendors: Vendor[];
 }
 
-type Tab = "dashboard" | "users" | "services";
+type Tab = "dashboard" | "users" | "services" | "vendors";
 
 export default function DashboardView({
   user,
   initialUsers,
   initialServices,
+  initialVendors,
 }: DashboardViewProps) {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
 
@@ -56,6 +74,9 @@ export default function DashboardView({
             <ServicesView initialServices={initialServices} />
           )}
           {activeTab === "users" && <UsersView users={initialUsers} />}
+          {activeTab === "vendors" && (
+            <VendorsView initialVendors={initialVendors} />
+          )}
         </main>
       </div>
     </div>

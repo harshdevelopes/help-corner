@@ -8,7 +8,7 @@ async function getDashboardData() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { user: null, users: [], admins: [], services: [] };
+    return { user: null, users: [], admins: [], services: [], vendors: [] };
   }
 
   const { data: users, error: usersError } = await supabase
@@ -19,10 +19,14 @@ async function getDashboardData() {
     .from("hc_services")
     .select("*");
 
-  if (usersError || servicesError) {
+  const { data: vendors, error: vendorsError } = await supabase
+    .from("hc_vendors")
+    .select("*");
+
+  if (usersError || servicesError || vendorsError) {
     console.error(
       "Error fetching dashboard data:",
-      usersError || servicesError
+      usersError || servicesError || vendorsError
     );
   }
 
@@ -30,11 +34,12 @@ async function getDashboardData() {
     user,
     users: users || [],
     services: services || [],
+    vendors: vendors || [],
   };
 }
 
 export default async function DashboardPage() {
-  const { user, users, services } = await getDashboardData();
+  const { user, users, services, vendors } = await getDashboardData();
 
   if (!user) {
     return (
@@ -49,6 +54,7 @@ export default async function DashboardPage() {
       user={user}
       initialUsers={users}
       initialServices={services}
+      initialVendors={vendors}
     />
   );
 }
