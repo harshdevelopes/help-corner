@@ -2,7 +2,7 @@
 
 import React from "react";
 
-type Tab = "dashboard" | "users" | "services";
+type Tab = "dashboard" | "users" | "services" | "vendors";
 
 interface SidebarProps {
   activeTab: Tab;
@@ -41,6 +41,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
               className={`nav-link ${activeTab === "services" ? "active" : ""}`}
             >
               <span>🔧</span> <span>Services</span>
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setActiveTab("vendors")}
+              className={`nav-link ${activeTab === "vendors" ? "active" : ""}`}
+            >
+              <span>👷</span> <span>Vendors</span>
             </button>
           </li>
         </ul>
