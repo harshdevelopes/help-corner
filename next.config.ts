@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "iili.io",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "static.vecteezy.com",
         port: "",
         pathname: "/**",

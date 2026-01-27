@@ -17,7 +17,8 @@ async function getServices(): Promise<Service[]> {
   const { data, error } = await supabase
     .from("hc_services")
     .select("*")
-    .limit(3);
+    .limit(3)
+    .order("id", { ascending: true });
   if (error) {
     console.error("Error fetching services:", error);
     return [];
