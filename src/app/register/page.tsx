@@ -1,65 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { supabase } from "@/utils/supabase";
+import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
+import { signUp } from "../actions";
+
+const initialState = {
+  error: "",
+  success: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit" className="submit-btn" disabled={pending}>
+      {pending ? "Creating Account..." : "Create an account"}
+    </button>
+  );
+}
+
+export async function signUpAction(
+  prevState: { error: string; success: string },
+  formData: FormData
+): Promise<{ error: string; success: string }> {
+  // your logic
+  const result = await signUp(formData);
+  return { error: result.error || "", success: result.success || "" };
+}
 
 export default function Register() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
-
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          user_name: username,
-          user_number: mobile,
-        },
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    } else if (user) {
-      // Also insert into profiles table
-      const { error: profileError } = await supabase.from("profiles").insert([
-        {
-          id: user.id,
-          user_name: username,
-          user_number: mobile,
-          user_role: "user",
-        },
-      ]);
-
-      if (profileError) {
-        setError(profileError.message);
-      } else {
-        setSuccess(
-          "Registration successful! Please check your email to confirm your account."
-        );
-      }
-    }
-  };
+  const [state, formAction] = useFormState(signUpAction, initialState);
 
   return (
     <div className="container">
@@ -75,10 +46,10 @@ export default function Register() {
       </div>
 
       <div className="form-section">
-        <form onSubmit={handleRegister}>
+        <form action={formAction}>
           <h2>&nbsp;Create an account</h2>
 
-          {error && (
+          {state?.error && (
             <div
               style={{
                 color: "#721c24",
@@ -93,11 +64,11 @@ export default function Register() {
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              <strong style={{ color: "#721c24" }}>✗</strong> {error}
+              <strong style={{ color: "#721c24" }}>✗</strong> {state.error}
             </div>
           )}
 
-          {success && (
+          {state?.success && (
             <div
               style={{
                 color: "#155724",
@@ -112,22 +83,20 @@ export default function Register() {
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              <strong style={{ color: "#155724" }}>✓</strong> {success}
+              <strong style={{ color: "#155724" }}>✓</strong> {state.success}
             </div>
           )}
 
           <div className="input-row">
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              name="username"
               placeholder="Username"
               required
             />
             <input
               type="tel"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              name="mobile"
               placeholder="Mobile Number"
               required
             />
@@ -135,8 +104,7 @@ export default function Register() {
           <div className="input-row">
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
               placeholder="Email address"
               required
             />
@@ -144,15 +112,13 @@ export default function Register() {
           <div className="input-row">
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
               placeholder="Password"
               required
             />
             <input
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
               placeholder="Confirm password"
               required
             />
@@ -163,9 +129,7 @@ export default function Register() {
             & symbols
           </p>
 
-          <button type="submit" className="submit-btn">
-            Create an account
-          </button>
+          <SubmitButton />
           <Link href="/login">
             <button type="button" className="login-btn">
               Login
