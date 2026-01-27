@@ -5,7 +5,17 @@ import { supabase } from "@/utils/supabase";
 import Image from "next/image";
 
 // Image Modal Component
-const ImageModal = ({ src, alt, isOpen, onClose }: { src: string; alt: string; isOpen: boolean; onClose: () => void }) => {
+const ImageModal = ({
+  src,
+  alt,
+  isOpen,
+  onClose,
+}: {
+  src: string;
+  alt: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -69,7 +79,17 @@ const ImageModal = ({ src, alt, isOpen, onClose }: { src: string; alt: string; i
 };
 
 // Helper component for images with view button
-const VendorImageWithView = ({ src, alt, width = 50, height = 50 }: { src: string; alt: string; width?: number; height?: number }) => {
+const VendorImageWithView = ({
+  src,
+  alt,
+  width = 50,
+  height = 50,
+}: {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+}) => {
   const [imgError, setImgError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -82,7 +102,14 @@ const VendorImageWithView = ({ src, alt, width = 50, height = 50 }: { src: strin
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "5px",
+        }}
+      >
         <Image
           src={src}
           alt={alt}
@@ -108,7 +135,12 @@ const VendorImageWithView = ({ src, alt, width = 50, height = 50 }: { src: strin
           View
         </button>
       </div>
-      <ImageModal src={src} alt={alt} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <ImageModal
+        src={src}
+        alt={alt}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </>
   );
 };
@@ -136,7 +168,7 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
   const [vendors, setVendors] = useState(initialVendors);
   const [showForm, setShowForm] = useState(false);
   const [editingVendor, setEditingVendor] = useState<Vendor | null>(null);
-  
+
   // Form state
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -149,7 +181,7 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
   const [nickName, setNickName] = useState("");
   const [availability, setAvailability] = useState("");
   const [physicalFormPhoto, setPhysicalFormPhoto] = useState("");
-  
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -237,18 +269,19 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
           resetForm();
         }
       }
-    } catch (err: any) {
-      setErrorMessage("Error: " + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMessage("Error: " + err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
     }
   };
 
   const handleDelete = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this vendor?")) {
-      const { error } = await supabase
-        .from("hc_vendors")
-        .delete()
-        .eq("id", id);
-      
+      const { error } = await supabase.from("hc_vendors").delete().eq("id", id);
+
       if (error) {
         alert("Error deleting vendor: " + error.message);
       } else {
@@ -259,7 +292,14 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
 
   return (
     <div id="vendors-section" className="dashboard-section active">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
         <h2 className="section-title">Manage Vendors</h2>
         <button
           onClick={() => {
@@ -274,7 +314,10 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
       </div>
 
       {showForm && (
-        <section className="add-service-section" style={{ marginBottom: "20px" }}>
+        <section
+          className="add-service-section"
+          style={{ marginBottom: "20px" }}
+        >
           <h3 className="section-title" style={{ fontSize: "20px" }}>
             {editingVendor ? "Edit Vendor" : "Add New Vendor"}
           </h3>
@@ -377,7 +420,9 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="bankDetailsPhoto">Bank Details (Passbook) Photo URL</label>
+              <label htmlFor="bankDetailsPhoto">
+                Bank Details (Passbook) Photo URL
+              </label>
               <input
                 id="bankDetailsPhoto"
                 type="text"
@@ -388,7 +433,9 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="policeVerification">Police Verification (Photo/Document) URL</label>
+              <label htmlFor="policeVerification">
+                Police Verification (Photo/Document) URL
+              </label>
               <input
                 id="policeVerification"
                 type="text"
@@ -442,7 +489,10 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
             <tbody>
               {vendors.length === 0 ? (
                 <tr>
-                  <td colSpan={12} style={{ textAlign: "center", padding: "20px" }}>
+                  <td
+                    colSpan={12}
+                    style={{ textAlign: "center", padding: "20px" }}
+                  >
                     No vendors found. Add a new vendor to get started.
                   </td>
                 </tr>
@@ -451,14 +501,20 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                   <tr key={vendor.id}>
                     <td>
                       {vendor.photo ? (
-                        <VendorImageWithView src={vendor.photo} alt={vendor.name} />
+                        <VendorImageWithView
+                          src={vendor.photo}
+                          alt={vendor.name}
+                        />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
                     </td>
                     <td>
                       {vendor.aadhar_card_photo ? (
-                        <VendorImageWithView src={vendor.aadhar_card_photo} alt="Aadhar Card" />
+                        <VendorImageWithView
+                          src={vendor.aadhar_card_photo}
+                          alt="Aadhar Card"
+                        />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
@@ -471,14 +527,20 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                     </td>
                     <td>
                       {vendor.bank_details_photo ? (
-                        <VendorImageWithView src={vendor.bank_details_photo} alt="Bank Details" />
+                        <VendorImageWithView
+                          src={vendor.bank_details_photo}
+                          alt="Bank Details"
+                        />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
                     </td>
                     <td>
                       {vendor.police_verification ? (
-                        <VendorImageWithView src={vendor.police_verification} alt="Police Verification" />
+                        <VendorImageWithView
+                          src={vendor.police_verification}
+                          alt="Police Verification"
+                        />
                       ) : (
                         <span style={{ color: "#999" }}>Not provided</span>
                       )}
@@ -487,7 +549,10 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
                     <td>{vendor.availability || "-"}</td>
                     <td>
                       {vendor.physical_form_photo ? (
-                        <VendorImageWithView src={vendor.physical_form_photo} alt="Physical Form" />
+                        <VendorImageWithView
+                          src={vendor.physical_form_photo}
+                          alt="Physical Form"
+                        />
                       ) : (
                         <span style={{ color: "#999" }}>No photo</span>
                       )}
@@ -518,4 +583,3 @@ const VendorsView: React.FC<VendorsViewProps> = ({ initialVendors }) => {
 };
 
 export default VendorsView;
-
